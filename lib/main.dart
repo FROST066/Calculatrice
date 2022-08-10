@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import 'package:function_tree/function_tree.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,54 +18,85 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Calculatrice(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+class Calculatrice extends StatefulWidget {
+  const Calculatrice({Key? key}) : super(key: key);
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Calculatrice> createState() => _CalculatriceState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _CalculatriceState extends State<Calculatrice> {
+  Color cYellow = const Color.fromARGB(255, 150, 135, 6);
+  Color cBlack = const Color.fromARGB(255, 43, 40, 40);
+  Color cWhite = const Color.fromARGB(255, 163, 153, 153);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Calculatrice'), centerTitle: true),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(height: 25.0),
-            Text(equation, textScaleFactor: 2.0),
-            Text(aff, textScaleFactor: 3.0),
-            SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+      appBar: AppBar(
+        title: const Text('Calculatrice'),
+        centerTitle: true,
+        backgroundColor: cBlack,
+        elevation: 0,
+      ),
+      body: Center(
+        child: Container(
+          color: cBlack,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(equation, textScaleFactor: 1.5, maxLines: 4, style: TextStyle(color: cWhite)),
+              ),
+              Text(aff, textScaleFactor: 4.0, style: const TextStyle(color: Colors.white)),
+              Center(
                 child: Container(
-                    height: 350.0,
-                    width: 510.0,
-                    decoration: const BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-                    child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                      ligne(touche("("), touche("."), touche(")"), ope("+"), ope("mod"), Container(width: 0)),
-                      ligne(touche("7"), touche("8"), touche("9"), ope("-"), ope("sin"), Container(width: 2)),
-                      ligne(touche("4"), touche("5"), touche("6"), ope("x"), ope("cos"), Container(width: 2)),
-                      ligne(touche("1"), touche("2"), touche("3"), ope("/"), ope("tan"), Container(width: 2)),
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                        ElevatedButton(
-                          onPressed: effacer,
-                          onLongPress: tout_effacer,
-                          child: const Icon(CupertinoIcons.xmark_circle, size: 40.0),
-                        ),
-                        touche("0"),
-                        touche("00"),
-                        SizedBox(height: 60.0, width: 165.0, child: ElevatedButton(child: const Icon(CupertinoIcons.equal, size: 55.0), onPressed: () => egale(true))),
-                        Container(width: 7)
-                      ])
-                    ])))
-          ],
-        ));
+                    padding: const EdgeInsets.all(5),
+                    height: MediaQuery.of(context).size.height * 6 / 10,
+                    width: MediaQuery.of(context).size.width * 8 / 10,
+                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                      colonne(touche("(", cWhite), touche("7", cWhite), touche("4", cWhite), touche("1", cWhite), touche("0", cWhite)),
+                      colonne(touche(")", cWhite), touche("8", cWhite), touche("5", cWhite), touche("2", cWhite), touche(".", cWhite)),
+                      colonne(
+                          touche("%", cWhite),
+                          touche("9", cWhite),
+                          touche("6", cWhite),
+                          touche("3", cWhite),
+                          TextButton(
+                            onPressed: effacer,
+                            onLongPress: toutEffacer,
+                            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(cWhite), backgroundColor: MaterialStateProperty.all<Color>(cBlack)),
+                            child: const Icon(Icons.cancel_outlined, size: 55.0),
+                          )),
+                      colonne(
+                          touche("/", cYellow),
+                          touche("x", cYellow),
+                          touche("+", cYellow),
+                          touche("-", cYellow),
+                          ElevatedButton(
+                            onPressed: () => egale(true),
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(cYellow)),
+                            child: const Icon(CupertinoIcons.equal, size: 55.0),
+                          )),
+                    ])),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget colonne(Widget a, Widget b, Widget c, Widget d, Widget e) {
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [a, b, c, d, e]);
   }
 
   void effacer() {
@@ -77,49 +108,43 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void tout_effacer() {
+  void toutEffacer() {
     setState(() {
       aff = "";
       equation = "";
     });
   }
 
-  TextButton touche(String ch) {
-    return TextButton(child: Text(ch, style: TextStyle(color: Colors.indigo[100]), textAlign: TextAlign.center, textScaleFactor: 2.0), onPressed: () => add_char(ch));
+  Widget touche(String ch, Color color) {
+    return Container(width: 50, height: 50, child: TextButton(child: Text(ch, style: TextStyle(color: color), textAlign: TextAlign.center, textScaleFactor: 2.0), onPressed: () => add_char(ch)));
   }
 
   void add_char(String ch) {
-    if (equation.length < 22)
+    if (equation.length < 22) {
       setState(() {
-        equation = equation + ch;
+        equation += ch;
         egale(false);
       });
-  }
-
-  Widget ope(String ch) {
-    return Container(color: Colors.indigo, child: touche(ch));
-  }
-
-  Row ligne(Widget a, Widget b, Widget c, Widget d, Widget e, Widget f) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [a, b, c, d, e, f],
-    );
+    }
   }
 
   void egale(bool bol) {
-    if (equation.isEmpty)
+    if (equation.isEmpty) {
       aff = "";
-    else {
+    } else {
       setState(() {
         try {
           String equa = equation;
-          equa = equa.replaceAll("mod", "%").replaceAll("x", "*");
-          // aff="${equa.interpret()}";
+          equa = equa.replaceAll("x", "*");
+          Parser p = Parser();
+          Expression exp = p.parse(equa);
+          ContextModel cm = ContextModel();
+          aff = '${exp.evaluate(EvaluationType.REAL, cm)}';
+
           if (aff.substring(aff.length - 2) == ".0") aff = aff.substring(0, (aff.length) - 2);
           if (aff.length > 15) aff = aff.substring(0, 10) + aff.substring(aff.length - 5);
         } catch (erreur) {
-          if (bol) aff = "Erreur de syntaxe";
+          if (bol) aff = "Erreur de syntaxe ";
         }
       });
     }
