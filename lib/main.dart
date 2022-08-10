@@ -6,7 +6,7 @@ void main() {
   runApp(const MyApp());
 }
 
-late String aff = "", equation = "";
+String aff = "", equation = "";
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -15,9 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
+      theme: ThemeData.dark(),
       home: Calculatrice(),
     );
   }
@@ -42,53 +40,59 @@ class _CalculatriceState extends State<Calculatrice> {
         backgroundColor: cBlack,
         elevation: 0,
       ),
-      body: Center(
-        child: Container(
-          color: cBlack,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(equation, textScaleFactor: 1.5, maxLines: 4, style: TextStyle(color: cWhite)),
-              ),
-              Text(aff, textScaleFactor: 4.0, style: const TextStyle(color: Colors.white)),
-              Center(
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    height: MediaQuery.of(context).size.height * 6 / 10,
-                    width: MediaQuery.of(context).size.width * 8 / 10,
-                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30.0))),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                      colonne(touche("(", cWhite), touche("7", cWhite), touche("4", cWhite), touche("1", cWhite), touche("0", cWhite)),
-                      colonne(touche(")", cWhite), touche("8", cWhite), touche("5", cWhite), touche("2", cWhite), touche(".", cWhite)),
-                      colonne(
-                          touche("%", cWhite),
-                          touche("9", cWhite),
-                          touche("6", cWhite),
-                          touche("3", cWhite),
-                          TextButton(
-                            onPressed: effacer,
-                            onLongPress: toutEffacer,
-                            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(cWhite), backgroundColor: MaterialStateProperty.all<Color>(cBlack)),
-                            child: const Icon(Icons.cancel_outlined, size: 55.0),
-                          )),
-                      colonne(
-                          touche("/", cYellow),
-                          touche("x", cYellow),
-                          touche("+", cYellow),
-                          touche("-", cYellow),
-                          ElevatedButton(
-                            onPressed: () => egale(true),
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(cYellow)),
-                            child: const Icon(CupertinoIcons.equal, size: 55.0),
-                          )),
-                    ])),
-              )
-            ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            color: cBlack,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(equation, textScaleFactor: 1.5, maxLines: 4, style: TextStyle(color: cWhite)),
+                ),
+                Text(aff, textScaleFactor: 4.0, style: const TextStyle(color: Colors.white)),
+                Center(
+                  child: Container(
+                      padding: const EdgeInsets.all(5),
+                      height: MediaQuery.of(context).size.height * 6 / 10,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                        colonne(touche("(", cWhite), touche("7", cWhite), touche("4", cWhite), touche("1", cWhite), touche("0", cWhite)),
+                        colonne(touche(")", cWhite), touche("8", cWhite), touche("5", cWhite), touche("2", cWhite), touche(".", cWhite)),
+                        colonne(
+                            touche("%", cWhite),
+                            touche("9", cWhite),
+                            touche("6", cWhite),
+                            touche("3", cWhite),
+                            Container(
+                              width: 50,
+                              height: 50,
+                              child: TextButton(
+                                onPressed: effacer,
+                                onLongPress: toutEffacer,
+                                style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(cWhite), backgroundColor: MaterialStateProperty.all<Color>(cBlack)),
+                                child: const Icon(Icons.cancel_outlined, size: 35.0),
+                              ),
+                            )),
+                        colonne(
+                            touche("/", cYellow),
+                            touche("x", cYellow),
+                            touche("+", cYellow),
+                            touche("-", cYellow),
+                            ElevatedButton(
+                              onPressed: () => egale(true),
+                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(cYellow)),
+                              child: const Icon(CupertinoIcons.equal, size: 55.0),
+                            )),
+                      ])),
+                )
+              ],
+            ),
           ),
         ),
       ),
