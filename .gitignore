@@ -33,7 +33,8 @@ migrate_working_dir/
 /build/
 
 # Web related
-/.firebase/
+.firebase/
+*.cache
 
 # Symbolication related
 app.*.symbols
@@ -45,3 +46,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+.firebase/hosting.YnVpbGQvd2Vi.cache

@@ -230,7 +230,7 @@ class _CalculatriceState extends State<Calculatrice> {
           //check if each Ans is surrounded by operators
 
           if (equa.contains("Ans") && equa.length > 3) {
-            print("Enter here");
+            debugPrint("Enter here");
             for (int i = 0; i < equa.length - 2; i++) {
               if (equa[i] == "A") {
                 if (i - 1 >= 0) {
@@ -254,6 +254,7 @@ class _CalculatriceState extends State<Calculatrice> {
 
           // Fix implicit multiplication bug
           for (int i = 0; i < equa.length - 1; i++) {
+            debugPrint("Enter here 2");
             if (isNumeric(equa[i]) &&
                 (equa[i + 1] == "s" ||
                     equa[i + 1] == "c" ||
@@ -271,13 +272,13 @@ class _CalculatriceState extends State<Calculatrice> {
                   "${equa.substring(0, i + 1)}*${equa.substring(i + 1, equa.length)}";
             }
           }
-          print("Avant le parser $equa");
+          debugPrint("Avant le parser $equa");
           Expression exp = parser.parse(equa);
           resultat = '${exp.evaluate(EvaluationType.REAL, cm)}';
 
           if (bol) memoire = resultat;
-          if (resultat.substring(resultat.length - 2) == ".0") {
-            resultat = resultat.substring(0, (resultat.length) - 2);
+          if (resultat.endsWith(".0")) {
+            resultat = resultat.substring(0, resultat.length - 2);
           }
           if (resultat.length > 15) {
             resultat = resultat.substring(0, 10) +
@@ -285,7 +286,7 @@ class _CalculatriceState extends State<Calculatrice> {
           }
           if (bol) equation = "Ans";
         } catch (erreur) {
-          print(erreur);
+          debugPrint(erreur.toString());
           resultat = bol ? "Erreur de syntaxe" : "";
         }
       });
