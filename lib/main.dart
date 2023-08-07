@@ -50,8 +50,9 @@ class _CalculatriceState extends State<Calculatrice> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 20, horizontal: 10)
+                            .copyWith(top: 40),
                     child: SingleChildScrollView(
                       reverse: true,
                       scrollDirection: Axis.horizontal,
@@ -273,6 +274,7 @@ class _CalculatriceState extends State<Calculatrice> {
           print("Avant le parser $equa");
           Expression exp = parser.parse(equa);
           resultat = '${exp.evaluate(EvaluationType.REAL, cm)}';
+
           if (bol) memoire = resultat;
           if (resultat.substring(resultat.length - 2) == ".0") {
             resultat = resultat.substring(0, (resultat.length) - 2);
@@ -283,6 +285,7 @@ class _CalculatriceState extends State<Calculatrice> {
           }
           if (bol) equation = "Ans";
         } catch (erreur) {
+          print(erreur);
           resultat = bol ? "Erreur de syntaxe" : "";
         }
       });
