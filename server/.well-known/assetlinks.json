@@ -1,9 +1,0 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.example.test_go_router",
-    "sha256_cert_fingerprints":
-    ["FA:F3:7A:65:A0:95:D9:61:46:FA:40:32:DB:DE:78:64:4A:49:65:DE:D4:56:9B:68:D3:09:73:E5:97:9A:6B:D0"]
-  }
-}]
